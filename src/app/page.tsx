@@ -675,10 +675,10 @@ export default function Home() {
                 Misi
               </div>
               {[
-                { num: "01", icon: <Palette className="h-5 w-5" />, title: "Kreativitas Tanpa Batas", desc: "Menyediakan aset 2D dan 3D yang kreatif, ekspresif, dan mampu membawa visi artistik setiap game developer ke kehidupan nyata.", color: "cyan" },
-                { num: "02", icon: <Award className="h-5 w-5" />, title: "Standar Kualitas Tinggi", desc: "Setiap produk melewati proses quality control ketat. Kami tidak merilis sesuatu yang tidak kami banggakan sendiri.", color: "violet" },
-                { num: "03", icon: <Users className="h-5 w-5" />, title: "Kolaborasi Tim yang Kuat", desc: "Membangun budaya kerja yang solid, di mana setiap anggota tim dapat berkembang dan menghasilkan karya terbaik mereka.", color: "pink" },
-                { num: "04", icon: <Box className="h-5 w-5" />, title: "Ekosistem Digital Berkelanjutan", desc: "Membangun brand SatuGama sebagai identitas digital yang kuat dan dikenal di kalangan komunitas game developer Asia Tenggara.", color: "emerald" },
+                { num: "01", icon: <Palette className="h-5 w-5" />, title: "Kreativitas Tanpa Batas", desc: "Menyediakan layanan desain 2D dan 3D yang kreatif dan berkualitas.", color: "cyan" },
+                { num: "02", icon: <Award className="h-5 w-5" />, title: "Standar Kualitas Tinggi", desc: "Memberikan pelayanan profesional dan responsif kepada klien.", color: "violet" },
+                { num: "03", icon: <Users className="h-5 w-5" />, title: "Kolaborasi Tim yang Kuat", desc: "Meningkatkan kemampuan kreativitas anggota tim ", color: "pink" },
+                { num: "04", icon: <Box className="h-5 w-5" />, title: "Ekosistem Digital Berkelanjutan", desc: "Membangun branding dan identitas digital SatuGama secara kreatif ", color: "emerald" },
               ].map((misi) => (
                 <div
                   key={misi.num}
