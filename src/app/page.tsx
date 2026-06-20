@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { CharacterCustomizer } from "@/components/character-customizer";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -45,6 +46,7 @@ import {
 const PORTFOLIO_ITEMS = [
   {
     id: 1,
+    slug: "last-signal-glitch-ui-pack",
     category: "ui",
     title: "Last Signal — Glitch UI Pack",
     tagline: "Cyberpunk-ready interface kit",
@@ -56,10 +58,11 @@ const PORTFOLIO_ITEMS = [
     iconBg: "bg-indigo-500/20 border-indigo-500/30",
     icon: <Layers className="h-8 w-8 text-indigo-300" />,
     accentColor: "text-indigo-400",
-    ctaBorder: "border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500 hover:border-indigo-500 hover:text-white",
+    ctaBorderDetail: "border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500 hover:border-indigo-500 hover:text-white",
   },
   {
     id: 2,
+    slug: "dungeon-crawler-tileset",
     category: "2d",
     title: "Dungeon Crawler Tileset",
     tagline: "16-bit pixel art dungeon collection",
@@ -71,10 +74,11 @@ const PORTFOLIO_ITEMS = [
     iconBg: "bg-amber-500/20 border-amber-500/30",
     icon: <Palette className="h-8 w-8 text-amber-300" />,
     accentColor: "text-amber-400",
-    ctaBorder: "border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500 hover:border-amber-500 hover:text-white",
+    ctaBorderDetail: "border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500 hover:border-amber-500 hover:text-white",
   },
   {
     id: 3,
+    slug: "sci-fi-starfighter-pack",
     category: "3d",
     title: "Sci-Fi Starfighter Pack",
     tagline: "Low-poly 3D spacecraft collection",
@@ -86,7 +90,7 @@ const PORTFOLIO_ITEMS = [
     iconBg: "bg-violet-500/20 border-violet-500/30",
     icon: <Box className="h-8 w-8 text-violet-300" />,
     accentColor: "text-violet-400",
-    ctaBorder: "border-violet-500/30 bg-violet-500/10 text-violet-300 hover:bg-violet-500 hover:border-violet-500 hover:text-white",
+    ctaBorderDetail: "border-violet-500/30 bg-violet-500/10 text-violet-300 hover:bg-violet-500 hover:border-violet-500 hover:text-white",
   },
 ];
 
@@ -693,13 +697,17 @@ export default function Home() {
                 key={item.id}
                 className="group rounded-2xl overflow-hidden border border-white/8 bg-[#0e1020]/80 card-hover flex flex-col"
               >
-                {/* Thumbnail header */}
-                <div className={`relative h-48 bg-gradient-to-br ${item.gradient} flex items-center justify-center overflow-hidden`}>
+                {/* Thumbnail header — clickable link to detail page */}
+                <Link
+                  href={`/catalog/${item.slug}`}
+                  className={`relative h-48 bg-gradient-to-br ${item.gradient} flex items-center justify-center overflow-hidden`}
+                  aria-label={`Lihat detail ${item.title}`}
+                >
                   <div className="absolute inset-0 bg-black/25" />
                   <div className="absolute inset-0 bg-dot-pattern opacity-15" />
                   {/* Product icon */}
                   <div className="relative z-10 flex flex-col items-center gap-3">
-                    <div className={`w-16 h-16 rounded-2xl border ${item.iconBg} flex items-center justify-center backdrop-blur-sm`}>
+                    <div className={`w-16 h-16 rounded-2xl border ${item.iconBg} flex items-center justify-center backdrop-blur-sm group-hover:scale-105 transition-transform duration-300`}>
                       {item.icon}
                     </div>
                     <span className="px-3 py-1 rounded-full bg-black/40 border border-white/15 text-[10px] font-bold tracking-widest uppercase text-white/90">
@@ -711,18 +719,26 @@ export default function Home() {
                     <div className="text-[10px] text-white/50 leading-none mb-0.5">Mulai dari</div>
                     <div className="text-sm font-bold text-amber-300">{item.price}</div>
                   </div>
-                </div>
+                  {/* Hover overlay */}
+                  <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span className="px-4 py-2 rounded-xl bg-white/15 border border-white/25 text-white text-xs font-bold backdrop-blur-sm flex items-center gap-2">
+                      Lihat Detail <ArrowRight className="h-3.5 w-3.5" />
+                    </span>
+                  </div>
+                </Link>
 
                 {/* Content */}
                 <div className="p-6 flex flex-col flex-1 gap-4">
                   <div>
                     <p className="text-xs text-slate-500 mb-1 font-medium">{item.tagline}</p>
-                    <h3
-                      className={`font-bold text-white text-base group-hover:${item.accentColor} transition-colors leading-snug`}
-                      style={{ fontFamily: "var(--font-sora)" }}
-                    >
-                      {item.title}
-                    </h3>
+                    <Link href={`/catalog/${item.slug}`}>
+                      <h3
+                        className={`font-bold text-white text-base group-hover:${item.accentColor} transition-colors leading-snug hover:underline decoration-dotted underline-offset-2`}
+                        style={{ fontFamily: "var(--font-sora)" }}
+                      >
+                        {item.title}
+                      </h3>
+                    </Link>
                   </div>
 
                   <p className="text-slate-500 text-sm leading-relaxed flex-1">{item.desc}</p>
@@ -736,14 +752,20 @@ export default function Home() {
                     ))}
                   </div>
 
-                  {/* CTA */}
-                  <div className="pt-3 border-t border-white/6">
+                  {/* Dual CTA */}
+                  <div className="pt-3 border-t border-white/6 flex gap-2">
+                    <Link
+                      href={`/catalog/${item.slug}`}
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl btn-primary text-white text-xs font-bold transition-all duration-200"
+                    >
+                      Lihat Detail
+                      <ArrowRight className="h-3 w-3" />
+                    </Link>
                     <a
                       href="#contact"
-                      className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border ${item.ctaBorder} text-xs font-semibold transition-all duration-200`}
+                      className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl border ${item.ctaBorderDetail} text-xs font-semibold transition-all duration-200`}
                     >
-                      Pesan Sekarang
-                      <ArrowRight className="h-3.5 w-3.5" />
+                      Pesan
                     </a>
                   </div>
                 </div>
