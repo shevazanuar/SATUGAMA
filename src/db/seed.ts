@@ -19,6 +19,11 @@ import { PRODUCTS } from "../data/products";
 import { auth } from "../lib/auth";
 
 async function main() {
+  if (process.env.NODE_ENV === "production") {
+    console.error("❌ Critical Error: Seeder is locked on production!");
+    process.exit(1);
+  }
+
   console.log("🌱 Menjalankan Seeding Database...");
 
   const dbUrl = process.env.DATABASE_URL;
