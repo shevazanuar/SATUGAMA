@@ -1,15 +1,13 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getSessionCookie } from "better-auth/cookies";
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   // Hanya proteksi rute /admin/* dan kecualikan halaman login
   if (path.startsWith("/admin") && path !== "/admin/login") {
-    // Better Auth menyimpan token sesi dalam cookie dengan nama "better-auth.session_token" atau "__Secure-better-auth.session_token" (HTTPS)
-    const sessionCookie = 
-      request.cookies.get("better-auth.session_token") || 
-      request.cookies.get("__Secure-better-auth.session_token");
+    const sessionCookie = getSessionCookie(request);
 
     if (!sessionCookie) {
       // Jika cookie sesi tidak ditemukan, redirect ke halaman login
