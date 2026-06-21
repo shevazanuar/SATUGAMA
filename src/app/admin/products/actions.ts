@@ -10,6 +10,51 @@ import {
 } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+
+// Zod schemas for validation
+const productDataSchema = z.object({
+  slug: z.string().min(1),
+  category: z.enum(["2d", "3d", "ui"]),
+  title: z.string().min(1),
+  tagline: z.string().min(1),
+  shortDesc: z.string().min(1),
+  longDesc: z.array(z.string()),
+  price: z.string().min(1),
+  priceValue: z.number().int().nonnegative(),
+  badge: z.string().min(1),
+  gradient: z.string().min(1),
+  headerGradient: z.string().min(1),
+  iconBg: z.string().min(1),
+  accentColor: z.string().min(1),
+  ctaBorder: z.string().min(1),
+  releaseDate: z.string().min(1),
+  version: z.string().min(1),
+  fileSize: z.string().min(1),
+  isFeatured: z.boolean().default(false),
+  isPublished: z.boolean().default(true),
+  whatYouGet: z.array(
+    z.object({
+      title: z.string().min(1),
+      description: z.string().min(1),
+      icon: z.string().min(1),
+    })
+  ),
+});
+
+const listsSchema = z.object({
+  features: z.array(z.string()),
+  specs: z.array(
+    z.object({
+      label: z.string().min(1),
+      value: z.string().min(1),
+    })
+  ),
+  compatibility: z.array(z.string()),
+  tags: z.array(z.string()),
+});
 
 export async function createProductAction(
   productData: any,
@@ -20,19 +65,31 @@ export async function createProductAction(
     tags: string[];
   }
 ) {
+  // Session check
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session) {
+    throw new Error("Unauthorized access");
+  }
+
+  // Zod validation
+  const validatedProductData = productDataSchema.parse(productData);
+  const validatedLists = listsSchema.parse(lists);
+
   try {
     // 1. Insert product
     const [insertedProduct] = await db
       .insert(products)
-      .values(productData)
+      .values(validatedProductData)
       .returning({ id: products.id });
 
     const productId = insertedProduct.id;
 
     // 2. Insert features
-    if (lists.features.length > 0) {
+    if (validatedLists.features.length > 0) {
       await db.insert(productFeatures).values(
-        lists.features.map((feat, index) => ({
+        validatedLists.features.map((feat, index) => ({
           productId,
           featureText: feat,
           displayOrder: index,
@@ -41,9 +98,9 @@ export async function createProductAction(
     }
 
     // 3. Insert specs
-    if (lists.specs.length > 0) {
+    if (validatedLists.specs.length > 0) {
       await db.insert(productSpecs).values(
-        lists.specs.map((spec, index) => ({
+        validatedLists.specs.map((spec, index) => ({
           productId,
           label: spec.label,
           value: spec.value,
@@ -53,9 +110,9 @@ export async function createProductAction(
     }
 
     // 4. Insert compatibility
-    if (lists.compatibility.length > 0) {
+    if (validatedLists.compatibility.length > 0) {
       await db.insert(productCompatibility).values(
-        lists.compatibility.map((engine) => ({
+        validatedLists.compatibility.map((engine) => ({
           productId,
           engineName: engine,
         }))
@@ -63,9 +120,9 @@ export async function createProductAction(
     }
 
     // 5. Insert tags
-    if (lists.tags.length > 0) {
+    if (validatedLists.tags.length > 0) {
       await db.insert(productTags).values(
-        lists.tags.map((tag) => ({
+        validatedLists.tags.map((tag) => ({
           productId,
           tag,
         }))
@@ -92,22 +149,35 @@ export async function updateProductAction(
     tags: string[];
   }
 ) {
+  // Session check
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session) {
+    throw new Error("Unauthorized access");
+  }
+
+  // Zod validation
+  const validatedId = z.number().int().positive().parse(id);
+  const validatedProductData = productDataSchema.parse(productData);
+  const validatedLists = listsSchema.parse(lists);
+
   try {
     // 1. Update product main data
-    await db.update(products).set(productData).where(eq(products.id, id));
+    await db.update(products).set(validatedProductData).where(eq(products.id, validatedId));
 
     // 2. Transaksi menghapus data relasi lama & memasukkan data baru
     // Hapus lama
-    await db.delete(productFeatures).where(eq(productFeatures.productId, id));
-    await db.delete(productSpecs).where(eq(productSpecs.productId, id));
-    await db.delete(productCompatibility).where(eq(productCompatibility.productId, id));
-    await db.delete(productTags).where(eq(productTags.productId, id));
+    await db.delete(productFeatures).where(eq(productFeatures.productId, validatedId));
+    await db.delete(productSpecs).where(eq(productSpecs.productId, validatedId));
+    await db.delete(productCompatibility).where(eq(productCompatibility.productId, validatedId));
+    await db.delete(productTags).where(eq(productTags.productId, validatedId));
 
     // Masukkan baru - features
-    if (lists.features.length > 0) {
+    if (validatedLists.features.length > 0) {
       await db.insert(productFeatures).values(
-        lists.features.map((feat, index) => ({
-          productId: id,
+        validatedLists.features.map((feat, index) => ({
+          productId: validatedId,
           featureText: feat,
           displayOrder: index,
         }))
@@ -115,10 +185,10 @@ export async function updateProductAction(
     }
 
     // Masukkan baru - specs
-    if (lists.specs.length > 0) {
+    if (validatedLists.specs.length > 0) {
       await db.insert(productSpecs).values(
-        lists.specs.map((spec, index) => ({
-          productId: id,
+        validatedLists.specs.map((spec, index) => ({
+          productId: validatedId,
           label: spec.label,
           value: spec.value,
           displayOrder: index,
@@ -127,20 +197,20 @@ export async function updateProductAction(
     }
 
     // Masukkan baru - compatibility
-    if (lists.compatibility.length > 0) {
+    if (validatedLists.compatibility.length > 0) {
       await db.insert(productCompatibility).values(
-        lists.compatibility.map((engine) => ({
-          productId: id,
+        validatedLists.compatibility.map((engine) => ({
+          productId: validatedId,
           engineName: engine,
         }))
       );
     }
 
     // Masukkan baru - tags
-    if (lists.tags.length > 0) {
+    if (validatedLists.tags.length > 0) {
       await db.insert(productTags).values(
-        lists.tags.map((tag) => ({
-          productId: id,
+        validatedLists.tags.map((tag) => ({
+          productId: validatedId,
           tag,
         }))
       );
@@ -157,9 +227,20 @@ export async function updateProductAction(
 }
 
 export async function deleteProductAction(id: number) {
+  // Session check
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session) {
+    throw new Error("Unauthorized access");
+  }
+
+  // Zod validation
+  const validatedId = z.number().int().positive().parse(id);
+
   try {
     // Cascade delete di DB akan menghapus semua relasi secara otomatis
-    await db.delete(products).where(eq(products.id, id));
+    await db.delete(products).where(eq(products.id, validatedId));
     
     revalidatePath("/admin/products");
     revalidatePath("/catalog/[slug]", "layout");
