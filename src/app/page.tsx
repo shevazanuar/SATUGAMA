@@ -28,6 +28,8 @@ import {
   Volume2,
   Layers,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Award,
   Users,
   Package,
@@ -169,6 +171,11 @@ const STATS = [
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState("all");
+  const [productIndex, setProductIndex] = useState(0);
+
+  useEffect(() => {
+    setProductIndex(0);
+  }, [activeFilter]);
   const [scrolled, setScrolled] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [name, setName] = useState("");
@@ -181,6 +188,9 @@ export default function Home() {
     text: string;
   }>({ type: null, text: "" });
 
+  const [portfolioItems, setPortfolioItems] = useState(PORTFOLIO_ITEMS);
+  const [teamMembersList, setTeamMembersList] = useState(TEAM_MEMBERS);
+
   useEffect(() => {
     const handleScroll = () => {
       const y = window.scrollY;
@@ -189,6 +199,110 @@ export default function Home() {
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("/api/products");
+        const data = await res.json();
+        if (data.success && data.products && data.products.length > 0) {
+          const getIconForCategory = (category: string) => {
+            switch (category) {
+              case "ui":
+                return <Layers className="h-8 w-8 text-indigo-300" />;
+              case "2d":
+                return <Palette className="h-8 w-8 text-amber-300" />;
+              case "3d":
+                return <Box className="h-8 w-8 text-violet-300" />;
+              default:
+                return <Layers className="h-8 w-8 text-indigo-300" />;
+            }
+          };
+
+          const mapped = data.products.map((p: any) => ({
+            id: p.id,
+            slug: p.slug,
+            category: p.category,
+            title: p.title,
+            tagline: p.tagline,
+            desc: p.shortDesc,
+            price: p.price,
+            badge: p.badge,
+            tags: p.tags.map((t: any) => t.tag),
+            gradient: p.gradient,
+            iconBg: p.iconBg,
+            icon: getIconForCategory(p.category),
+            accentColor: p.accentColor,
+            ctaBorderDetail: p.ctaBorder || "border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500 hover:border-indigo-500 hover:text-white",
+          }));
+          setPortfolioItems(mapped);
+        }
+      } catch (e) {
+        console.warn("Gagal fetch produk dari API:", e);
+      }
+    };
+
+    const fetchTeam = async () => {
+      try {
+        const res = await fetch("/api/team");
+        const data = await res.json();
+        if (data.success && data.team && data.team.length > 0) {
+          const getTeamStyles = (index: number) => {
+            const styles = [
+              {
+                gradient: "from-amber-500 to-orange-500",
+                borderColor: "border-amber-500/20",
+                accentText: "text-amber-400",
+                accentBg: "bg-amber-500/10",
+                accentBorder: "border-amber-500/25",
+              },
+              {
+                gradient: "from-indigo-500 to-blue-500",
+                borderColor: "border-indigo-500/20",
+                accentText: "text-indigo-400",
+                accentBg: "bg-indigo-500/10",
+                accentBorder: "border-indigo-500/25",
+              },
+              {
+                gradient: "from-violet-500 to-purple-500",
+                borderColor: "border-violet-500/20",
+                accentText: "text-violet-400",
+                accentBg: "bg-violet-500/10",
+                accentBorder: "border-violet-500/25",
+              },
+              {
+                gradient: "from-emerald-500 to-teal-500",
+                borderColor: "border-emerald-500/20",
+                accentText: "text-emerald-400",
+                accentBg: "bg-emerald-500/10",
+                accentBorder: "border-emerald-500/25",
+              }
+            ];
+            return styles[index % styles.length];
+          };
+
+          const mapped = data.team.map((member: any, index: number) => {
+            const style = getTeamStyles(index);
+            return {
+              id: member.id,
+              name: member.name,
+              role: member.role,
+              bio: member.bio,
+              badge: member.badge || "SatuGama Team",
+              photo: member.photoUrl,
+              ...style,
+            };
+          });
+          setTeamMembersList(mapped);
+        }
+      } catch (e) {
+        console.warn("Gagal fetch tim dari API:", e);
+      }
+    };
+
+    fetchProducts();
+    fetchTeam();
   }, []);
 
   const handleContactSubmit = async (e: React.FormEvent) => {
@@ -215,9 +329,23 @@ export default function Home() {
     }
   };
 
-  const filteredItems = PORTFOLIO_ITEMS.filter(
+  const filteredItems = portfolioItems.filter(
     (i) => activeFilter === "all" || i.category === activeFilter
   );
+
+  const visibleItems = filteredItems.length <= 3
+    ? filteredItems
+    : Array.from({ length: 3 }).map((_, i) => filteredItems[(productIndex + i) % filteredItems.length]);
+
+  const nextProduct = () => {
+    if (filteredItems.length <= 3) return;
+    setProductIndex((prev) => (prev + 1) % filteredItems.length);
+  };
+
+  const prevProduct = () => {
+    if (filteredItems.length <= 3) return;
+    setProductIndex((prev) => (prev - 1 + filteredItems.length) % filteredItems.length);
+  };
 
   return (
     <div className="bg-[#090a14] text-slate-100 min-h-screen antialiased overflow-x-hidden">
@@ -414,27 +542,40 @@ export default function Home() {
                 {/* 2×2 product grid */}
                 <div className="grid grid-cols-2 gap-3 mb-5">
                   {[
-                    { icon: <Layers className="h-4.5 w-4.5 text-indigo-400" />, title: "UI Kit", sub: "80+ komponen", bg: "bg-indigo-500/10 border-indigo-500/20" },
-                    { icon: <Palette className="h-4.5 w-4.5 text-amber-400" />, title: "2D Pixel Art", sub: "340+ sprites", bg: "bg-amber-500/10 border-amber-500/20" },
-                    { icon: <Box className="h-4.5 w-4.5 text-violet-400" />, title: "3D Models", sub: "FBX & OBJ", bg: "bg-violet-500/10 border-violet-500/20" },
-                    { icon: <Volume2 className="h-4.5 w-4.5 text-emerald-400" />, title: "Audio SFX", sub: "24 efek HD", bg: "bg-emerald-500/10 border-emerald-500/20" },
+                    { icon: <Layers className="h-4.5 w-4.5 text-indigo-400" />, title: "UI Kit", sub: "80+ komponen", bg: "bg-indigo-500/10 border-indigo-500/20", filter: "ui" },
+                    { icon: <Palette className="h-4.5 w-4.5 text-amber-400" />, title: "2D Pixel Art", sub: "340+ sprites", bg: "bg-amber-500/10 border-amber-500/20", filter: "2d" },
+                    { icon: <Box className="h-4.5 w-4.5 text-violet-400" />, title: "3D Models", sub: "FBX & OBJ", bg: "bg-violet-500/10 border-violet-500/20", filter: "3d" },
+                    { icon: <Volume2 className="h-4.5 w-4.5 text-emerald-400" />, title: "Audio SFX", sub: "24 efek HD", bg: "bg-emerald-500/10 border-emerald-500/20", filter: "ui" },
                   ].map((card, i) => (
-                    <div key={i} className={`p-4 rounded-xl border ${card.bg} hover:scale-[1.03] transition-transform cursor-default`}>
+                    <button
+                      key={i}
+                      onClick={() => {
+                        setActiveFilter(card.filter);
+                        document.getElementById("catalog")?.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className={`p-4 rounded-xl border ${card.bg} hover:scale-[1.03] transition-all cursor-pointer text-left w-full hover:border-white/20`}
+                    >
                       <div className={`w-8 h-8 rounded-lg border flex items-center justify-center mb-3 ${card.bg}`}>
                         {card.icon}
                       </div>
                       <div className="text-white text-sm font-semibold leading-tight">{card.title}</div>
                       <div className="text-slate-500 text-xs mt-0.5">{card.sub}</div>
-                    </div>
+                    </button>
                   ))}
                 </div>
 
                 {/* Bottom strip */}
                 <div className="flex items-center justify-between pt-4 border-t border-white/6">
                   <div className="text-xs text-slate-500">26+ produk tersedia</div>
-                  <div className="px-3 py-1.5 rounded-lg bg-indigo-500/15 border border-indigo-500/25 text-indigo-400 text-xs font-semibold flex items-center gap-1">
+                  <button
+                    onClick={() => {
+                      setActiveFilter("all");
+                      document.getElementById("catalog")?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className="px-3 py-1.5 rounded-lg bg-indigo-500/15 border border-indigo-500/25 text-indigo-400 text-xs font-semibold flex items-center gap-1 cursor-pointer hover:bg-indigo-500/25 transition-colors"
+                  >
                     Lihat Semua <ArrowRight className="h-3 w-3" />
-                  </div>
+                  </button>
                 </div>
               </div>
 
@@ -690,87 +831,133 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Products grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {filteredItems.map((item) => (
-              <article
-                key={item.id}
-                className="group rounded-2xl overflow-hidden border border-white/8 bg-[#0e1020]/80 card-hover flex flex-col"
-              >
-                {/* Thumbnail header — clickable link to detail page */}
-                <Link
-                  href={`/catalog/${item.slug}`}
-                  className={`relative h-48 bg-gradient-to-br ${item.gradient} flex items-center justify-center overflow-hidden`}
-                  aria-label={`Lihat detail ${item.title}`}
+          {/* Products carousel container */}
+          <div className="relative px-0 md:px-4">
+            {/* Left and Right navigation buttons (desktop) */}
+            {filteredItems.length > 3 && (
+              <>
+                <button
+                  onClick={prevProduct}
+                  className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-20 p-3.5 rounded-full border border-white/8 bg-[#0c0d1b]/95 text-slate-400 hover:text-white hover:border-white/20 transition-all shadow-2xl backdrop-blur-md cursor-pointer hover:scale-105"
+                  aria-label="Produk sebelumnya"
                 >
-                  <div className="absolute inset-0 bg-black/25" />
-                  <div className="absolute inset-0 bg-dot-pattern opacity-15" />
-                  {/* Product icon */}
-                  <div className="relative z-10 flex flex-col items-center gap-3">
-                    <div className={`w-16 h-16 rounded-2xl border ${item.iconBg} flex items-center justify-center backdrop-blur-sm group-hover:scale-105 transition-transform duration-300`}>
-                      {item.icon}
-                    </div>
-                    <span className="px-3 py-1 rounded-full bg-black/40 border border-white/15 text-[10px] font-bold tracking-widest uppercase text-white/90">
-                      {item.badge}
-                    </span>
-                  </div>
-                  {/* Price pill */}
-                  <div className="absolute bottom-3 right-3 px-3 py-1.5 rounded-lg bg-black/50 border border-white/12 backdrop-blur-sm">
-                    <div className="text-[10px] text-white/50 leading-none mb-0.5">Mulai dari</div>
-                    <div className="text-sm font-bold text-amber-300">{item.price}</div>
-                  </div>
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <span className="px-4 py-2 rounded-xl bg-white/15 border border-white/25 text-white text-xs font-bold backdrop-blur-sm flex items-center gap-2">
-                      Lihat Detail <ArrowRight className="h-3.5 w-3.5" />
-                    </span>
-                  </div>
-                </Link>
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={nextProduct}
+                  className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-20 p-3.5 rounded-full border border-white/8 bg-[#0c0d1b]/95 text-slate-400 hover:text-white hover:border-white/20 transition-all shadow-2xl backdrop-blur-md cursor-pointer hover:scale-105"
+                  aria-label="Produk berikutnya"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              </>
+            )}
 
-                {/* Content */}
-                <div className="p-6 flex flex-col flex-1 gap-4">
-                  <div>
-                    <p className="text-xs text-slate-500 mb-1 font-medium">{item.tagline}</p>
-                    <Link href={`/catalog/${item.slug}`}>
-                      <h3
-                        className={`font-bold text-white text-base group-hover:${item.accentColor} transition-colors leading-snug hover:underline decoration-dotted underline-offset-2`}
-                        style={{ fontFamily: "var(--font-sora)" }}
-                      >
-                        {item.title}
-                      </h3>
-                    </Link>
-                  </div>
-
-                  <p className="text-slate-500 text-sm leading-relaxed flex-1">{item.desc}</p>
-
-                  {/* Feature tags */}
-                  <div className="flex flex-wrap gap-1.5">
-                    {item.tags.map((t) => (
-                      <span key={t} className="px-2.5 py-1 rounded-md text-[10px] font-medium bg-white/5 border border-white/8 text-slate-400">
-                        {t}
+            {/* Products grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {visibleItems.map((item) => (
+                <article
+                  key={item.id}
+                  className="group rounded-2xl overflow-hidden border border-white/8 bg-[#0e1020]/80 card-hover flex flex-col"
+                >
+                  {/* Thumbnail header — clickable link to detail page */}
+                  <Link
+                    href={`/catalog/${item.slug}`}
+                    className={`relative h-48 bg-gradient-to-br ${item.gradient} flex items-center justify-center overflow-hidden`}
+                    aria-label={`Lihat detail ${item.title}`}
+                  >
+                    <div className="absolute inset-0 bg-black/25" />
+                    <div className="absolute inset-0 bg-dot-pattern opacity-15" />
+                    {/* Product icon */}
+                    <div className="relative z-10 flex flex-col items-center gap-3">
+                      <div className={`w-16 h-16 rounded-2xl border ${item.iconBg} flex items-center justify-center backdrop-blur-sm group-hover:scale-105 transition-transform duration-300`}>
+                        {item.icon}
+                      </div>
+                      <span className="px-3 py-1 rounded-full bg-black/40 border border-white/15 text-[10px] font-bold tracking-widest uppercase text-white/90">
+                        {item.badge}
                       </span>
-                    ))}
-                  </div>
+                    </div>
+                    {/* Price pill */}
+                    <div className="absolute bottom-3 right-3 px-3 py-1.5 rounded-lg bg-black/50 border border-white/12 backdrop-blur-sm">
+                      <div className="text-[10px] text-white/50 leading-none mb-0.5">Mulai dari</div>
+                      <div className="text-sm font-bold text-amber-300">{item.price}</div>
+                    </div>
+                    {/* Hover overlay */}
+                    <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <span className="px-4 py-2 rounded-xl bg-white/15 border border-white/25 text-white text-xs font-bold backdrop-blur-sm flex items-center gap-2">
+                        Lihat Detail <ArrowRight className="h-3.5 w-3.5" />
+                      </span>
+                    </div>
+                  </Link>
 
-                  {/* Dual CTA */}
-                  <div className="pt-3 border-t border-white/6 flex gap-2">
-                    <Link
-                      href={`/catalog/${item.slug}`}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl btn-primary text-white text-xs font-bold transition-all duration-200"
-                    >
-                      Lihat Detail
-                      <ArrowRight className="h-3 w-3" />
-                    </Link>
-                    <a
-                      href="#contact"
-                      className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl border ${item.ctaBorderDetail} text-xs font-semibold transition-all duration-200`}
-                    >
-                      Pesan
-                    </a>
+                  {/* Content */}
+                  <div className="p-6 flex flex-col flex-1 gap-4">
+                    <div>
+                      <p className="text-xs text-slate-500 mb-1 font-medium">{item.tagline}</p>
+                      <Link href={`/catalog/${item.slug}`}>
+                        <h3
+                          className={`font-bold text-white text-base group-hover:${item.accentColor} transition-colors leading-snug hover:underline decoration-dotted underline-offset-2`}
+                          style={{ fontFamily: "var(--font-sora)" }}
+                        >
+                          {item.title}
+                        </h3>
+                      </Link>
+                    </div>
+
+                    <p className="text-slate-500 text-sm leading-relaxed flex-1">{item.desc}</p>
+
+                    {/* Feature tags */}
+                    <div className="flex flex-wrap gap-1.5">
+                      {item.tags.map((t) => (
+                        <span key={t} className="px-2.5 py-1 rounded-md text-[10px] font-medium bg-white/5 border border-white/8 text-slate-400">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Dual CTA */}
+                    <div className="pt-3 border-t border-white/6 flex gap-2">
+                      <Link
+                        href={`/catalog/${item.slug}`}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl btn-primary text-white text-xs font-bold transition-all duration-200"
+                      >
+                        Lihat Detail
+                        <ArrowRight className="h-3 w-3" />
+                      </Link>
+                      <a
+                        href="#contact"
+                        className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl border ${item.ctaBorderDetail} text-xs font-semibold transition-all duration-200`}
+                      >
+                        Pesan
+                      </a>
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              ))}
+            </div>
+
+            {/* Mobile navigation controls */}
+            {filteredItems.length > 3 && (
+              <div className="flex md:hidden items-center justify-center gap-4 mt-8">
+                <button
+                  onClick={prevProduct}
+                  className="p-3 rounded-xl border border-white/8 bg-[#0c0d1b]/95 text-slate-400 hover:text-white transition-colors"
+                  aria-label="Sebelumnya"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                <span className="text-xs text-slate-500 font-mono font-semibold">
+                  {productIndex + 1} / {filteredItems.length}
+                </span>
+                <button
+                  onClick={nextProduct}
+                  className="p-3 rounded-xl border border-white/8 bg-[#0c0d1b]/95 text-slate-400 hover:text-white transition-colors"
+                  aria-label="Berikutnya"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+            )}
           </div>
 
         </div>
@@ -795,7 +982,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {TEAM_MEMBERS.map((member) => (
+            {teamMembersList.map((member) => (
               <div
                 key={member.name}
                 className={`group relative rounded-2xl border ${member.borderColor} bg-[#0e1020]/60 card-hover overflow-hidden flex flex-col`}

@@ -22,19 +22,22 @@ import {
   Zap,
 } from "lucide-react";
 import {
-  PRODUCTS,
-  getProductBySlug,
-  getRelatedProducts,
   getCategoryLabel,
   type Product,
 } from "@/data/products";
+import {
+  getProductsFromDb,
+  getProductBySlugFromDb,
+  getRelatedProductsFromDb,
+} from "@/lib/products";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://satugama.studio";
 
 /* ─── Static Generation ─── */
 
-export function generateStaticParams() {
-  return PRODUCTS.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  const products = await getProductsFromDb();
+  return products.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -43,7 +46,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlugFromDb(slug);
   if (!product) return { title: "Produk Tidak Ditemukan" };
 
   return {
@@ -148,10 +151,10 @@ export default async function ProductDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlugFromDb(slug);
   if (!product) notFound();
 
-  const relatedProducts = getRelatedProducts(product);
+  const relatedProducts = await getRelatedProductsFromDb(product);
   const c = CATEGORY_COLORS[product.category];
   const categoryIcon = CATEGORY_ICONS[product.category];
 
