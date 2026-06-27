@@ -30,6 +30,7 @@ import {
   getProductBySlugFromDb,
   getRelatedProductsFromDb,
 } from "@/lib/products";
+import { Footer } from "@/components/footer";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://satugama.studio";
 
@@ -170,17 +171,17 @@ export default async function ProductDetailPage({
       {/* ═══════════════════════════════════════
           HEADER NAV
       ═══════════════════════════════════════ */}
-      <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[#090a14]/92 backdrop-blur-2xl">
+      <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.08] bg-[#0c0d1b]/95 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between gap-6">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group shrink-0" aria-label="SatuGama Studio — Beranda">
-            <div className="h-8 w-8 overflow-hidden rounded-xl bg-indigo-500/10 border border-indigo-500/20 p-0.5 group-hover:border-indigo-500/50 transition-all">
-              <Image src="/logo.png" alt="SatuGama" width={28} height={28} className="object-cover rounded-lg" />
+          <Link href="/" className="group shrink-0 block select-none" aria-label="SatuGama Studio — Beranda">
+            <div
+              className="font-extrabold text-[19px] tracking-tight text-white leading-none"
+              style={{ fontFamily: "var(--font-sora)" }}
+            >
+              Satu<span className="text-indigo-400 drop-shadow-[0_0_8px_rgba(99,102,241,0.3)]">Gama</span>
             </div>
-            <span className="font-bold text-[15px] text-white" style={{ fontFamily: "var(--font-sora)" }}>
-              Satu<span className="text-indigo-400">Gama</span>
-            </span>
           </Link>
 
           {/* Breadcrumb */}
@@ -211,7 +212,7 @@ export default async function ProductDetailPage({
         {/* ═══════════════════════════════════════
             HERO
         ═══════════════════════════════════════ */}
-        <section className="pt-14 pb-24 relative">
+        <section className="pt-24 pb-24 relative">
           <div className="max-w-6xl mx-auto px-5">
 
             {/* Back link */}
@@ -671,54 +672,7 @@ export default async function ProductDetailPage({
 
       </main>
 
-      {/* ═══════════════════════════════════════
-          FOOTER
-      ═══════════════════════════════════════ */}
-      <footer className="border-t border-white/[0.06] bg-[#060710]">
-        <div className="max-w-6xl mx-auto px-5 py-12">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="h-9 w-9 rounded-xl overflow-hidden border border-indigo-500/20 bg-indigo-500/10 p-0.5 group-hover:border-indigo-500/40 transition-all">
-                <Image src="/logo.png" alt="SatuGama" width={32} height={32} className="object-cover rounded-lg" />
-              </div>
-              <div>
-                <div className="font-bold text-white text-base" style={{ fontFamily: "var(--font-sora)" }}>
-                  Satu<span className="text-indigo-400">Gama</span> Studio
-                </div>
-                <div className="text-[11px] text-slate-600">Game Asset Maker</div>
-              </div>
-            </Link>
-
-            <nav className="flex flex-wrap gap-x-6 gap-y-2" aria-label="Footer navigation">
-              {[
-                { href: "/", label: "Beranda" },
-                { href: "/#about", label: "Tentang" },
-                { href: "/#catalog", label: "Katalog" },
-                { href: "/#team", label: "Tim" },
-                { href: "/#pricing", label: "Harga" },
-                { href: "/#contact", label: "Kontak" },
-              ].map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-sm text-slate-500 hover:text-slate-300 transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-
-          <div className="mt-8 pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600">
-            <span>© 2026 SatuGama Studio. All rights reserved.</span>
-            <div className="flex items-center gap-1.5">
-              <Gamepad2 className="h-3.5 w-3.5 text-slate-700" aria-hidden="true" />
-              <span>Crafted with passion for indie game developers</span>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   );
