@@ -174,7 +174,7 @@ async function main() {
     console.log("💬 Memasukkan data Testimonial...");
     await db.insert(testimonials).values([
       {
-        reviewerName: "David Miller",
+        reviewerName: "Zahwa Herdan",
         reviewerCompany: "Arcane Studios",
         content: "UI kit Last Signal benar-benar mempermudah pengembangan game sci-fi kami. Efek suara yang disertakan sangat membantu menghemat waktu!",
         rating: 5,
@@ -182,17 +182,17 @@ async function main() {
         isApproved: true,
       },
       {
-        reviewerName: "Sarah Chen",
-        reviewerCompany: "Solo Developer",
-        content: "Tileset Dungeon Crawler sangat rapi dan mudah digunakan dengan LDtk. Desain pixel art-nya sangat berkarakter.",
+        reviewerName: "Budi Santoso",
+        reviewerCompany: "Indie Dev Semarang",
+        content: "Tileset Dungeon Crawler sangat rapi dan mudah digunakan dengan Unity. Desain pixel art-nya sangat konsisten dan berkarakter.",
         rating: 5,
         productId: 2,
         isApproved: true,
       },
       {
-        reviewerName: "Yohanis Putra",
+        reviewerName: "Siti Rahma",
         reviewerCompany: "Nusantara Games",
-        content: "Model low-poly dari Sci-Fi Starfighter Pack sangat teroptimasi dengan baik. Penggunaan PBR texture membuat pesawat tampak mengesankan.",
+        content: "Model low-poly dari Sci-Fi Starfighter Pack sangat teroptimasi untuk mobile game. Penggunaan tekstur PBR membuat aset tampak berkualitas premium.",
         rating: 5,
         productId: 3,
         isApproved: true,
