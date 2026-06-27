@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CharacterCustomizer } from "@/components/character-customizer";
+import { Footer } from "@/components/footer";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -94,65 +95,47 @@ const PORTFOLIO_ITEMS = [
     accentColor: "text-violet-400",
     ctaBorderDetail: "border-violet-500/30 bg-violet-500/10 text-violet-300 hover:bg-violet-500 hover:border-violet-500 hover:text-white",
   },
+  {
+    id: 4,
+    slug: "medieval-weapons-3d-pack",
+    category: "3d",
+    title: "Medieval Weapons 3D Pack",
+    tagline: "Stylized low-poly armory collection",
+    desc: "Koleksi 28 model 3D senjata abad pertengahan kustom: pedang, tameng, kapak, busur, dan gada yang dioptimalkan untuk performa game RPG.",
+    price: "Rp 39.000",
+    badge: "3D Models",
+    tags: ["28 Weapons", "Low-Poly", "FBX + OBJ"],
+    gradient: "from-teal-600 via-emerald-700 to-green-800",
+    iconBg: "bg-teal-500/20 border-teal-500/30",
+    icon: <Box className="h-8 w-8 text-teal-300" />,
+    accentColor: "text-teal-400",
+    ctaBorderDetail: "border-teal-500/30 bg-teal-500/10 text-teal-300 hover:bg-teal-500 hover:border-teal-500 hover:text-white",
+  },
+  {
+    id: 5,
+    slug: "retro-rpg-hud-theme",
+    category: "ui",
+    title: "Retro RPG HUD Theme",
+    tagline: "Classic pixel art game interfaces",
+    desc: "Paket aset antarmuka game (HUD) bertema retro RPG pixel art lengkap dengan frame jendela dialog, bar status, icon item, dan kursor kustom.",
+    price: "Rp 34.000",
+    badge: "UI Design",
+    tags: ["Pixel Art", "120+ Elements", "HUD & UI"],
+    gradient: "from-rose-600 via-pink-700 to-red-800",
+    iconBg: "bg-rose-500/20 border-rose-500/30",
+    icon: <Layers className="h-8 w-8 text-rose-300" />,
+    accentColor: "text-rose-400",
+    ctaBorderDetail: "border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500 hover:border-rose-500 hover:text-white",
+  },
 ];
 
-const TEAM_MEMBERS = [
-  {
-    name: "Biges",
-    role: "CEO & Business Strategist",
-    badge: "D3 Teknik Informatika · Sem. 4",
-    bio: "Memimpin arah bisnis SatuGama — fokus pada perencanaan produk, kemitraan strategis, dan pengembangan bisnis yang berkelanjutan.",
-    photo: "/team-biges.png",
-    gradient: "from-amber-500 to-orange-500",
-    borderColor: "border-amber-500/20",
-    accentText: "text-amber-400",
-    accentBg: "bg-amber-500/10",
-    accentBorder: "border-amber-500/25",
-  },
-  {
-    name: "Dai",
-    role: "Lead Software Architect",
-    badge: "D3 Teknik Informatika · Sem. 4",
-    bio: "Membangun platform web SatuGama dari nol — sistem backend, integrasi API, dan character customizer interaktif yang berjalan optimal di semua perangkat.",
-    photo: "/team-dai.png",
-    gradient: "from-indigo-500 to-blue-500",
-    borderColor: "border-indigo-500/20",
-    accentText: "text-indigo-400",
-    accentBg: "bg-indigo-500/10",
-    accentBorder: "border-indigo-500/25",
-  },
-  {
-    name: "Ravie",
-    role: "Lead 3D Artist (Blender)",
-    badge: "D3 Teknik Informatika · Sem. 4",
-    bio: "Seniman 3D andalan tim — ahli dalam low-poly modeling, rigging, dan texturing menggunakan Blender untuk menghasilkan aset visual berkualitas tinggi.",
-    photo: "/team-ravie.png",
-    gradient: "from-violet-500 to-purple-500",
-    borderColor: "border-violet-500/20",
-    accentText: "text-violet-400",
-    accentBg: "bg-violet-500/10",
-    accentBorder: "border-violet-500/25",
-  },
-  {
-    name: "Sheva",
-    role: "UI/UX & Frontend Engineer",
-    badge: "D3 Teknik Informatika · Sem. 4",
-    bio: "Merancang dan membangun antarmuka SatuGama yang premium — berfokus pada UX intuitif, estetika konsisten, dan performa frontend yang optimal.",
-    photo: "/team-sheva.png",
-    gradient: "from-emerald-500 to-teal-500",
-    borderColor: "border-emerald-500/20",
-    accentText: "text-emerald-400",
-    accentBg: "bg-emerald-500/10",
-    accentBorder: "border-emerald-500/25",
-  },
-];
+
 
 const NAV_LINKS = [
   { href: "#home", label: "Beranda" },
   { href: "#about", label: "Tentang" },
   { href: "#customizer", label: "Customizer" },
   { href: "#catalog", label: "Katalog" },
-  { href: "#team", label: "Tim" },
   { href: "#pricing", label: "Harga" },
   { href: "#contact", label: "Kontak" },
 ];
@@ -189,7 +172,43 @@ export default function Home() {
   }>({ type: null, text: "" });
 
   const [portfolioItems, setPortfolioItems] = useState(PORTFOLIO_ITEMS);
-  const [teamMembersList, setTeamMembersList] = useState(TEAM_MEMBERS);
+  const [testimonialsList, setTestimonialsList] = useState<any[]>([
+    {
+      id: 1,
+      reviewerName: "Zahwa Herdan",
+      reviewerCompany: "Arcane Studios",
+      content: "UI kit Last Signal benar-benar mempermudah pengembangan game sci-fi kami. Efek suara yang disertakan sangat membantu menghemat waktu!",
+      rating: 5,
+    },
+    {
+      id: 2,
+      reviewerName: "Budi Santoso",
+      reviewerCompany: "Indie Dev Semarang",
+      content: "Tileset Dungeon Crawler sangat rapi dan mudah digunakan dengan Unity. Desain pixel art-nya sangat konsisten dan berkarakter.",
+      rating: 5,
+    },
+    {
+      id: 3,
+      reviewerName: "Siti Rahma",
+      reviewerCompany: "Nusantara Games",
+      content: "Model low-poly dari Sci-Fi Starfighter Pack sangat teroptimasi untuk mobile game. Penggunaan tekstur PBR membuat aset tampak berkualitas premium.",
+      rating: 5,
+    },
+    {
+      id: 4,
+      reviewerName: "Rian Hidayat",
+      reviewerCompany: "Garuda Game Dev",
+      content: "Sangat terbantu dengan layanan aset kustom SatuGama. Pengerjaan model 3D rapi, cepat, dan integrasi ke Unreal Engine berjalan lancar.",
+      rating: 5,
+    },
+    {
+      id: 5,
+      reviewerName: "Amelia Putri",
+      reviewerCompany: "Studio Chibi",
+      content: "Koleksi aset UI dan audio mereka berkualitas sangat premium. Asset kit Last Signal membuat prototipe game kami langsung terlihat profesional.",
+      rating: 5,
+    }
+  ]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -220,7 +239,7 @@ export default function Home() {
             }
           };
 
-          const mapped = data.products.map((p: any) => ({
+          let mapped = data.products.map((p: any) => ({
             id: p.id,
             slug: p.slug,
             category: p.category,
@@ -236,6 +255,12 @@ export default function Home() {
             accentColor: p.accentColor,
             ctaBorderDetail: p.ctaBorder || "border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500 hover:border-indigo-500 hover:text-white",
           }));
+
+          if (mapped.length < 5) {
+            const existingIds = new Set(mapped.map((m: any) => m.id));
+            const extra = PORTFOLIO_ITEMS.filter((item) => !existingIds.has(item.id));
+            mapped = [...mapped, ...extra];
+          }
           setPortfolioItems(mapped);
         }
       } catch (e) {
@@ -243,66 +268,7 @@ export default function Home() {
       }
     };
 
-    const fetchTeam = async () => {
-      try {
-        const res = await fetch("/api/team");
-        const data = await res.json();
-        if (data.success && data.team && data.team.length > 0) {
-          const getTeamStyles = (index: number) => {
-            const styles = [
-              {
-                gradient: "from-amber-500 to-orange-500",
-                borderColor: "border-amber-500/20",
-                accentText: "text-amber-400",
-                accentBg: "bg-amber-500/10",
-                accentBorder: "border-amber-500/25",
-              },
-              {
-                gradient: "from-indigo-500 to-blue-500",
-                borderColor: "border-indigo-500/20",
-                accentText: "text-indigo-400",
-                accentBg: "bg-indigo-500/10",
-                accentBorder: "border-indigo-500/25",
-              },
-              {
-                gradient: "from-violet-500 to-purple-500",
-                borderColor: "border-violet-500/20",
-                accentText: "text-violet-400",
-                accentBg: "bg-violet-500/10",
-                accentBorder: "border-violet-500/25",
-              },
-              {
-                gradient: "from-emerald-500 to-teal-500",
-                borderColor: "border-emerald-500/20",
-                accentText: "text-emerald-400",
-                accentBg: "bg-emerald-500/10",
-                accentBorder: "border-emerald-500/25",
-              }
-            ];
-            return styles[index % styles.length];
-          };
-
-          const mapped = data.team.map((member: any, index: number) => {
-            const style = getTeamStyles(index);
-            return {
-              id: member.id,
-              name: member.name,
-              role: member.role,
-              bio: member.bio,
-              badge: member.badge || "SatuGama Team",
-              photo: member.photoUrl,
-              ...style,
-            };
-          });
-          setTeamMembersList(mapped);
-        }
-      } catch (e) {
-        console.warn("Gagal fetch tim dari API:", e);
-      }
-    };
-
     fetchProducts();
-    fetchTeam();
   }, []);
 
   const handleContactSubmit = async (e: React.FormEvent) => {
@@ -361,24 +327,24 @@ export default function Home() {
           NAVBAR
       ══════════════════════════════════════════ */}
       <header
-        className={`sticky top-0 z-50 transition-all duration-400 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b bg-[#0c0d1b]/95 backdrop-blur-md ${
           scrolled
-            ? "border-b border-white/[0.06] bg-[#090a14]/92 backdrop-blur-2xl shadow-2xl shadow-black/30"
-            : "border-b border-transparent bg-transparent"
+            ? "border-white/[0.08] shadow-lg shadow-black/20"
+            : "border-white/[0.05]"
         }`}
       >
         <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between gap-6">
 
           {/* Logo */}
-          <a href="#home" className="flex items-center gap-3 group shrink-0" aria-label="SatuGama Studio — Beranda">
-            <div className="relative h-9 w-9 overflow-hidden rounded-xl bg-indigo-500/10 border border-indigo-500/20 p-0.5 group-hover:border-indigo-500/50 group-hover:bg-indigo-500/15 transition-all duration-300">
-              <Image src="/logo.png" alt="SatuGama Studio logo" width={32} height={32} className="object-cover rounded-lg" />
+          <a href="#home" className="group shrink-0 block select-none" aria-label="SatuGama Studio — Beranda">
+            <div
+              className="font-extrabold text-[19px] tracking-tight text-white leading-none"
+              style={{ fontFamily: "var(--font-sora)" }}
+            >
+              Satu<span className="text-indigo-400 drop-shadow-[0_0_8px_rgba(99,102,241,0.3)]">Gama</span>
             </div>
-            <div className="flex flex-col leading-none">
-              <span className="font-bold text-[15px] tracking-tight text-white" style={{ fontFamily: "var(--font-sora)" }}>
-                Satu<span className="text-indigo-400">Gama</span>
-              </span>
-              <span className="text-[9px] text-slate-500 tracking-widest uppercase">Game Studio</span>
+            <div className="text-[9px] text-slate-500 tracking-widest uppercase font-semibold mt-1">
+              Game Studio
             </div>
           </a>
 
@@ -963,71 +929,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════
-          TEAM
-      ══════════════════════════════════════════ */}
-      <section id="team" className="py-28 border-t border-white/[0.04] relative">
-        <div className="max-w-6xl mx-auto px-5">
 
-          <div className="text-center mb-16 space-y-4">
-            <p className="section-label text-violet-400">Tim Kami</p>
-            <h2 className="text-4xl md:text-5xl font-bold text-white">
-              Kreator di Balik <span className="text-gradient">SatuGama</span>
-            </h2>
-            <p className="text-slate-400 text-lg max-w-2xl mx-auto font-light leading-relaxed">
-              Empat mahasiswa berdedikasi dari Prodi D3 Teknik Informatika Politeknik
-              Negeri Semarang, bersatu dalam satu misi: membuat game development lebih
-              mudah dan terjangkau.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {teamMembersList.map((member) => (
-              <div
-                key={member.name}
-                className={`group relative rounded-2xl border ${member.borderColor} bg-[#0e1020]/60 card-hover overflow-hidden flex flex-col`}
-              >
-                {/* Top gradient accent bar */}
-                <div className={`h-0.5 w-full bg-gradient-to-r ${member.gradient} opacity-60 group-hover:opacity-100 transition-opacity duration-300`} aria-hidden="true" />
-
-                <div className="p-6 flex flex-col gap-4 flex-1">
-                  {/* Photo */}
-                  <div className={`relative h-16 w-16 rounded-2xl overflow-hidden bg-gradient-to-br ${member.gradient} shadow-lg ring-2 ring-white/8 group-hover:ring-white/20 transition-all shrink-0`}>
-                    <Image
-                      src={member.photo}
-                      alt={`Foto ${member.name} — ${member.role}`}
-                      fill
-                      className="object-cover object-top"
-                    />
-                  </div>
-
-                  {/* Name + Role */}
-                  <div>
-                    <div
-                      className={`font-bold text-white text-base group-hover:${member.accentText} transition-colors`}
-                      style={{ fontFamily: "var(--font-sora)" }}
-                    >
-                      {member.name}
-                    </div>
-                    <div className={`inline-flex items-center mt-1.5 px-2.5 py-1 rounded-lg ${member.accentBg} border ${member.accentBorder} text-[11px] font-medium ${member.accentText}`}>
-                      {member.role}
-                    </div>
-                  </div>
-
-                  {/* Student badge */}
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/8 text-[10px] text-slate-400 w-fit">
-                    🎓 {member.badge}
-                  </div>
-
-                  {/* Bio */}
-                  <p className="text-slate-500 text-xs leading-relaxed flex-1">{member.bio}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-        </div>
-      </section>
 
       {/* ═══════════════════════════════════════════
           PRICING
@@ -1152,6 +1054,115 @@ export default function Home() {
               </div>
             ))}
           </div>
+
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          TESTIMONIALS
+      ══════════════════════════════════════════ */}
+      <section id="testimonials" className="py-28 border-t border-white/[0.04] relative">
+        <div className="max-w-6xl mx-auto px-5">
+
+          <div className="text-center mb-16 space-y-4">
+            <p className="section-label text-indigo-400">Testimoni</p>
+            <h2 className="text-4xl md:text-5xl font-bold text-white">
+              Apa Kata <span className="text-gradient">Developer Game</span>
+            </h2>
+            <p className="text-slate-400 text-lg max-w-xl mx-auto font-light">
+              Ulasan asli dari para pembuat game indie yang menggunakan aset-aset buatan SatuGama Studio.
+            </p>
+          </div>
+
+          {/* Testimonial slider / scrollable view */}
+          <div className="relative">
+            {/* Left and Right navigation buttons (desktop) */}
+            <button
+              onClick={() => {
+                const container = document.getElementById("testimonials-scroll-container");
+                if (container) container.scrollBy({ left: -420, behavior: "smooth" });
+              }}
+              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-20 p-3.5 rounded-full border border-white/8 bg-[#0c0d1b]/95 text-slate-400 hover:text-white hover:border-white/20 transition-all shadow-2xl backdrop-blur-md cursor-pointer hover:scale-105"
+              aria-label="Sebelumnya"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              onClick={() => {
+                const container = document.getElementById("testimonials-scroll-container");
+                if (container) container.scrollBy({ left: 420, behavior: "smooth" });
+              }}
+              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-20 p-3.5 rounded-full border border-white/8 bg-[#0c0d1b]/95 text-slate-400 hover:text-white hover:border-white/20 transition-all shadow-2xl backdrop-blur-md cursor-pointer hover:scale-105"
+              aria-label="Berikutnya"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+
+            <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 scroll-smooth scrollbar-none" id="testimonials-scroll-container">
+              {testimonialsList.map((t, idx) => (
+                <div
+                  key={t.id || idx}
+                  className="bg-[#0c0d1b]/60 backdrop-blur-xl border border-white/8 p-8 rounded-2xl flex flex-col justify-between min-w-[290px] sm:min-w-[350px] md:min-w-[400px] max-w-[420px] snap-center relative shrink-0"
+                >
+                  {/* Glowing card border detail */}
+                  <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-indigo-500 to-violet-500 opacity-60 rounded-t-2xl" />
+                  
+                  <div className="space-y-4">
+                    {/* Stars */}
+                    <div className="flex gap-1">
+                      {Array.from({ length: t.rating || 5 }).map((_, i) => (
+                        <Star key={i} className="h-4.5 w-4.5 text-amber-400 fill-amber-400 drop-shadow-[0_0_6px_rgba(245,158,11,0.5)]" />
+                      ))}
+                    </div>
+                    {/* Content */}
+                    <p className="text-slate-300 text-sm leading-relaxed italic">
+                      "{t.content}"
+                    </p>
+                  </div>
+
+                  {/* Profile info */}
+                  <div className="flex items-center gap-3 pt-6 mt-6 border-t border-white/6">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center font-bold text-white text-sm shadow-md shadow-indigo-500/10 shrink-0">
+                      {t.reviewerName.charAt(0)}
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white text-sm" style={{ fontFamily: "var(--font-sora)" }}>
+                        {t.reviewerName}
+                      </h4>
+                      <p className="text-slate-500 text-xs mt-0.5">
+                        {t.reviewerCompany}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Mobile navigation controls */}
+            <div className="flex md:hidden items-center justify-center gap-4 mt-6">
+              <button
+                onClick={() => {
+                  const container = document.getElementById("testimonials-scroll-container");
+                  if (container) container.scrollBy({ left: -320, behavior: "smooth" });
+                }}
+                className="p-3 rounded-xl border border-white/8 bg-[#0c0d1b]/95 text-slate-400 hover:text-white transition-colors cursor-pointer hover:border-white/20"
+                aria-label="Sebelumnya"
+              >
+                <ChevronLeft className="h-4.5 w-4.5" />
+              </button>
+              <button
+                onClick={() => {
+                  const container = document.getElementById("testimonials-scroll-container");
+                  if (container) container.scrollBy({ left: 320, behavior: "smooth" });
+                }}
+                className="p-3 rounded-xl border border-white/8 bg-[#0c0d1b]/95 text-slate-400 hover:text-white transition-colors cursor-pointer hover:border-white/20"
+                aria-label="Berikutnya"
+              >
+                <ChevronRight className="h-4.5 w-4.5" />
+              </button>
+            </div>
+          </div>
+
 
         </div>
       </section>
@@ -1357,100 +1368,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════
-          FOOTER
-      ══════════════════════════════════════════ */}
-      <footer className="border-t border-white/[0.06] bg-[#060710]">
-        <div className="max-w-6xl mx-auto px-5 py-16">
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-
-            {/* Brand block */}
-            <div className="md:col-span-2">
-              <a href="#home" className="flex items-center gap-3 mb-5 group w-fit" aria-label="SatuGama Studio — ke atas">
-                <div className="relative h-9 w-9 rounded-xl overflow-hidden border border-indigo-500/20 bg-indigo-500/10 p-0.5 group-hover:border-indigo-500/40 transition-all">
-                  <Image src="/logo.png" alt="SatuGama logo" width={32} height={32} className="object-cover rounded-lg" />
-                </div>
-                <div>
-                  <div className="font-bold text-white text-base" style={{ fontFamily: "var(--font-sora)" }}>
-                    Satu<span className="text-indigo-400">Gama</span> Studio
-                  </div>
-                  <div className="text-[11px] text-slate-600">Game Asset Maker</div>
-                </div>
-              </a>
-              <p className="text-slate-500 text-sm leading-relaxed max-w-xs">
-                Studio kreatif spesialis game asset berbasis di Semarang, Indonesia.
-                Kami membantu developer indie menciptakan game yang lebih kaya secara visual.
-              </p>
-              {/* Social links */}
-              <div className="flex gap-3 mt-6">
-                <a
-                  href="https://github.com/shevazanuar/SATUGAMA"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-lg border border-white/8 bg-white/5 hover:bg-white/10 hover:border-white/18 flex items-center justify-center text-slate-400 hover:text-white transition-all"
-                  aria-label="GitHub SatuGama"
-                >
-                  <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
-                  </svg>
-                </a>
-                <a
-                  href="mailto:satuggama@gmail.com"
-                  className="w-9 h-9 rounded-lg border border-white/8 bg-white/5 hover:bg-indigo-500/15 hover:border-indigo-500/30 flex items-center justify-center text-slate-400 hover:text-indigo-400 transition-all"
-                  aria-label="Email SatuGama"
-                >
-                  <Mail className="h-4 w-4" aria-hidden="true" />
-                </a>
-              </div>
-            </div>
-
-            {/* Navigation */}
-            <div>
-              <div className="text-xs font-semibold text-slate-400 uppercase tracking-[0.15em] mb-4">Navigasi</div>
-              <ul className="space-y-2.5" role="list">
-                {NAV_LINKS.map((link) => (
-                  <li key={link.href}>
-                    <a href={link.href} className="text-sm text-slate-500 hover:text-slate-300 transition-colors">
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Contact info */}
-            <div>
-              <div className="text-xs font-semibold text-slate-400 uppercase tracking-[0.15em] mb-4">Kontak</div>
-              <ul className="space-y-3" role="list">
-                <li className="flex items-start gap-2.5">
-                  <Mail className="h-4 w-4 text-indigo-400 shrink-0 mt-0.5" aria-hidden="true" />
-                  <a href="mailto:satuggama@gmail.com" className="text-sm text-slate-500 hover:text-slate-300 transition-colors">
-                    satuggama@gmail.com
-                  </a>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <MapPin className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" aria-hidden="true" />
-                  <address className="text-sm text-slate-500 leading-relaxed not-italic">
-                    Jl. Garuda No 45, Banyumanik<br />
-                    Semarang, Jawa Tengah
-                  </address>
-                </li>
-              </ul>
-            </div>
-
-          </div>
-
-          {/* Bottom bar */}
-          <div className="pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600">
-            <span>© 2026 SatuGama Studio. All rights reserved.</span>
-            <div className="flex items-center gap-1.5">
-              <Gamepad2 className="h-3.5 w-3.5 text-slate-700" aria-hidden="true" />
-              <span>Crafted with passion for indie game developers</span>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       {/* Back to top */}
       {showBackToTop && (

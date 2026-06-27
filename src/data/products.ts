@@ -309,6 +309,122 @@ export const PRODUCTS: Product[] = [
     version: "1.0.0",
     fileSize: "~240 MB",
   },
+  /* ────────────────────────────────────────────────
+     4. MEDIEVAL WEAPONS 3D PACK
+  ──────────────────────────────────────────────── */
+  {
+    id: 4,
+    slug: "medieval-weapons-3d-pack",
+    category: "3d",
+    title: "Medieval Weapons 3D Pack",
+    tagline: "Stylized low-poly armory collection",
+    shortDesc:
+      "Koleksi 28 model 3D senjata abad pertengahan kustom: pedang, tameng, kapak, busur, dan gada yang dioptimalkan untuk performa game RPG.",
+    longDesc: [
+      "Medieval Weapons 3D Pack adalah koleksi senjata 3D bergaya low-poly yang dirancang untuk game RPG, petualangan, dan strategi bertema fantasi abad pertengahan. Setiap model dibuat dengan memprioritaskan efisiensi polygon dan estetika visual yang konsisten.",
+      "Koleksi ini mencakup berbagai jenis senjata: 8 variasi pedang (shortsword, longsword, claymore), 6 jenis tameng, 4 kapak perang, 4 busur panah dengan rig dasar, dan 6 senjata pemukul seperti gada dan warhammer. Semua model bertekstur hand-painted handal.",
+      "Tersedi file Blender asli (.blend) serta format universal FBX dan OBJ yang siap diimpor ke Unity, Unreal Engine, atau Godot. Cocok untuk game mobile maupun desktop."
+    ],
+    price: "Rp 39.000",
+    priceValue: 39000,
+    badge: "3D Models",
+    tags: ["28 Weapons", "Low-Poly", "FBX + OBJ"],
+    gradient: "from-teal-600 via-emerald-700 to-green-800",
+    headerGradient: "from-teal-900/60 via-[#090a14] to-[#090a14]",
+    iconBg: "bg-teal-500/20 border-teal-500/30",
+    accentColor: "text-teal-400",
+    ctaBorder:
+      "border-teal-500/30 bg-teal-500/10 text-teal-300 hover:bg-teal-500 hover:border-teal-500 hover:text-white",
+    features: [
+      "28 model senjata abad pertengahan unik",
+      "Format universal FBX, OBJ, dan .blend source file",
+      "Tekstur stylized hand-painted 1K",
+      "Rigging dasar pada busur panah",
+      "Polygon count sangat rendah: 150 - 600 tris per model",
+      "Siap digunakan di Unity dan Unreal Engine",
+    ],
+    whatYouGet: [
+      {
+        title: "Swords & Blades (8 model)",
+        description: "Pedang pendek, pedang panjang, rapier, dan claymore dengan gaya medieval fantastik.",
+        icon: "⚔️",
+      },
+      {
+        title: "Shields & Defense (6 model)",
+        description: "Tameng kayu bulat, tameng ksatria logam, dan tameng pelindung dengan ukiran unik.",
+        icon: "🛡️",
+      },
+    ],
+    specs: [
+      { label: "Format File", value: "FBX, OBJ, .blend" },
+      { label: "Tekstur", value: "Stylized Texture 1024x1024 px" },
+      { label: "Polygon Count", value: "150–600 tris per model" },
+      { label: "Jumlah Model", value: "28 senjata" },
+      { label: "Lisensi", value: "Komersial (1 game)" },
+    ],
+    compatibility: ["Unity 2021+", "Unreal Engine 5", "Godot 4", "Blender"],
+    releaseDate: "Mei 2026",
+    version: "1.0.0",
+    fileSize: "~45 MB",
+  },
+  /* ────────────────────────────────────────────────
+     5. RETRO RPG HUD THEME
+  ──────────────────────────────────────────────── */
+  {
+    id: 5,
+    slug: "retro-rpg-hud-theme",
+    category: "ui",
+    title: "Retro RPG HUD Theme",
+    tagline: "Classic pixel art game interfaces",
+    shortDesc:
+      "Paket aset antarmuka game (HUD) bertema retro RPG pixel art lengkap dengan frame jendela dialog, bar status, icon item, dan kursor kustom.",
+    longDesc: [
+      "Retro RPG HUD Theme dirancang khusus untuk game role-playing (RPG) 2D dengan gaya visual pixel art klasik 8-bit dan 16-bit. Setiap elemen digambar secara piksel-demi-piksel demi memberikan nuansa nostalgia konsol jadul yang otentik.",
+      "Pack ini menyediakan lebih dari 120 elemen visual antarmuka: frame jendela dialog yang modular, status bar (health, mana, exp), kursor mouse bergaya pedang dan tangan, box inventory, grid skill, serta 30 icon item fantasi seperti potion, koin, dan scroll.",
+      "Semua aset tersedia dalam format PNG transparan dengan resolusi grid 16x16 dan 32x32 piksel, serta file project utama Aseprite (.aseprite) untuk kemudahan kustomisasi warna dan animasi."
+    ],
+    price: "Rp 34.000",
+    priceValue: 34000,
+    badge: "UI Design",
+    tags: ["Pixel Art", "120+ Elements", "HUD & UI"],
+    gradient: "from-rose-600 via-pink-700 to-red-800",
+    headerGradient: "from-rose-900/60 via-[#090a14] to-[#090a14]",
+    iconBg: "bg-rose-500/20 border-rose-500/30",
+    accentColor: "text-rose-400",
+    ctaBorder:
+      "border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500 hover:border-rose-500 hover:text-white",
+    features: [
+      "120+ elemen UI pixel art",
+      "Frame dialog box modular & fleksibel",
+      "Status bar dengan border kayu & batu klasik",
+      "30 icon item petualangan 16x16 px",
+      "Kursor kustom beranimasi",
+      "Source file Aseprite (.aseprite) disertakan",
+    ],
+    whatYouGet: [
+      {
+        title: "Modular HUD Panels",
+        description: "Jendela menu, grid inventory, kotak dialog, dan bar status yang dapat dirangkai sesuai kebutuhan.",
+        icon: "🖼️",
+      },
+      {
+        title: "Adventure Icons",
+        description: "30 item ikonik: ramuan kesehatan, kunci kuno, buku sihir, koin emas, dan senjata piksel.",
+        icon: "🧪",
+      },
+    ],
+    specs: [
+      { label: "Resolusi Grid", value: "16x16 dan 32x32 px" },
+      { label: "Format File", value: "PNG (Transparan), .aseprite" },
+      { label: "Jumlah Elemen", value: "120+ aset UI" },
+      { label: "Palet Warna", value: "Retro NES/SNES 64-color" },
+      { label: "Lisensi", value: "Komersial (1 game)" },
+    ],
+    compatibility: ["Unity (UI Toolkit / Canvas)", "Godot 4", "GameMaker Studio", "Construct 3", "Engine 2D Lainnya"],
+    releaseDate: "Juni 2026",
+    version: "1.1.0",
+    fileSize: "~12 MB",
+  },
 ];
 
 /* ─── Helpers ─── */
