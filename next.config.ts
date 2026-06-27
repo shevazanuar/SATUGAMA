@@ -1,5 +1,9 @@
 import type { NextConfig } from "next";
 import path from "path";
+import dns from "node:dns";
+
+// Force DNS resolution to prefer IPv4 first globally in the Next.js process
+dns.setDefaultResultOrder("ipv4first");
 
 const nextConfig: NextConfig = {
   /* config options here */

@@ -2,6 +2,11 @@ import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
 import * as dotenv from "dotenv";
+import dns from "node:dns";
+
+// Force Node.js/Next.js to resolve IPv4 addresses first to avoid flaky/blocked IPv6 database connection timeouts on Windows
+dns.setDefaultResultOrder("ipv4first");
+
 
 // Muat variabel lingkungan secara manual jika dijalankan di luar runtime Next.js (seperti seeder script)
 dotenv.config({ path: ".env.local" });
