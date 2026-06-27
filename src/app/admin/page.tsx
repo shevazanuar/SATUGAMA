@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
-import { products, inquiries, teamMembers, testimonials } from "@/db/schema";
+import { products, inquiries, testimonials } from "@/db/schema";
 import { count, desc } from "drizzle-orm";
 import {
   Package,
@@ -25,7 +25,6 @@ export default async function AdminDashboardPage() {
   // Query agregasi data secara langsung di server
   const [productsCountResult] = await db.select({ value: count() }).from(products);
   const [inquiriesCountResult] = await db.select({ value: count() }).from(inquiries);
-  const [teamCountResult] = await db.select({ value: count() }).from(teamMembers);
   const [testimonialsCountResult] = await db.select({ value: count() }).from(testimonials);
 
   // Ambil 5 inquiries / pesan terbaru
@@ -50,13 +49,7 @@ export default async function AdminDashboardPage() {
       href: "/admin/inquiries",
       bg: "bg-amber-500/10 border-amber-500/20",
     },
-    {
-      label: "Anggota Tim",
-      value: teamCountResult?.value ?? 0,
-      icon: <Users className="h-5 w-5 text-violet-400" />,
-      href: "/admin/team",
-      bg: "bg-violet-500/10 border-violet-500/20",
-    },
+
     {
       label: "Testimonial",
       value: testimonialsCountResult?.value ?? 0,

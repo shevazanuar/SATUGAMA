@@ -50,7 +50,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: "/admin", label: "Dashboard", icon: <LayoutDashboard className="h-4 w-4" /> },
     { href: "/admin/products", label: "Produk", icon: <Package className="h-4 w-4" /> },
     { href: "/admin/inquiries", label: "Inquiries (Pesan)", icon: <Mail className="h-4 w-4" /> },
-    { href: "/admin/team", label: "Tim", icon: <Users className="h-4 w-4" /> },
     { href: "/admin/testimonials", label: "Testimonial", icon: <MessageSquare className="h-4 w-4" /> },
   ];
 
